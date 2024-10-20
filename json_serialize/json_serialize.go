@@ -73,6 +73,24 @@ func serializeMap(sb *strings.Builder, s reflect.Value) {
 	sb.WriteRune('}')
 }
 
+func serializeStruct(sb *strings.Builder, s reflect.Value) {
+	sb.WriteRune('{')
+	
+	t := s.Type()
+	fmt.Println(s.NumField())
+	for i := 0; i < s.NumField(); i++ {
+		f := t.Field(i)
+		serializeString(sb, f.Name)
+		sb.WriteRune(':')
+		serialize(sb, s.Field(i).Interface())
+		fmt.Println(i, s.NumField())
+		if i != s.NumField() -1 {
+			sb.WriteRune(',')
+		}
+	}
+	sb.WriteRune('}')
+}
+
 func serialize(sb *strings.Builder, s interface{}) {
 	if s == nil {
 		sb.WriteString(NULL)
@@ -96,6 +114,8 @@ func serialize(sb *strings.Builder, s interface{}) {
 		serializeSlices(sb, value)
 	case reflect.Map:
 		serializeMap(sb, value)
+	case reflect.Struct:
+		serializeStruct(sb, value)
 	default:
 		panic(fmt.Sprintf("Unknown type %v:%v", value.Kind(), value))
 	}

@@ -4,5 +4,5 @@ Not meant to be used in actual apps its just a implementation for myself to lear
 
 Not implemented
 
-- [ ] Struct to json
+- [x] Struct to json
 - [ ] Handling Unicode
